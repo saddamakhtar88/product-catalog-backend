@@ -11,8 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using CatalogueApi.Models;
 using Microsoft.OpenApi.Models;
+using Catalog.Services;
 
 namespace CatalogueApi
 {
@@ -28,10 +28,9 @@ namespace CatalogueApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
-            services.AddDbContext<CatalogueContext>(opt =>
-               opt.UseInMemoryDatabase("CatalogueList"));
-            
+            services.AddDbContext<ICatalogService, CatalogService>(opt =>
+            opt.UseInMemoryDatabase("Catalog"));
+
             services.AddControllers();
 
             // Register the Swagger generator, defining 1 or more Swagger documents
