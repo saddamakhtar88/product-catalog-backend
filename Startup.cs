@@ -12,7 +12,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Catalog.Services;
+using CatalogApi.Services;
+using CatalogApi.DataSource;
 
 namespace CatalogueApi
 {
@@ -28,8 +29,10 @@ namespace CatalogueApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ICatalogService, CatalogService>(opt =>
+            services.AddDbContext<CatalogDbContext>(opt =>
             opt.UseInMemoryDatabase("Catalog"));
+
+            services.AddScoped<ICatalogService, CatalogService>();
 
             services.AddControllers();
 

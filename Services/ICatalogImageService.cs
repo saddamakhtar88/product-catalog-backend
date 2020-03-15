@@ -1,6 +1,6 @@
-namespace Catalog.Services
+namespace CatalogApi.Services
 {
-    using Catalog.Dto;
+    using Domain.Model;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 

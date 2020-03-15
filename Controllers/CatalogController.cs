@@ -1,10 +1,10 @@
-namespace CatalogueApi.Controllers
+namespace CatalogApi.Controllers
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
-    using Catalog.Services;
-    using Catalog.Dto;
+    using Services;
+    using Domain.Model;
 
     [Route("api/[controller]")]
     [ApiController]
