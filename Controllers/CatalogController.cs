@@ -6,7 +6,7 @@ namespace CatalogApi.Controllers
     using Services;
     using Domain.Model;
 
-    [Route("api/[controller]")]
+    [Route("productCatalog/[controller]")]
     [ApiController]
     public class CatalogController : ControllerBase
     {

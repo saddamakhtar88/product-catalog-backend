@@ -34,6 +34,8 @@ namespace CatalogueApi
 
             services.AddScoped<ICatalogService, CatalogService>();
 
+            services.AddScoped<IImageUploadService, ImageUploadService>();           
+
             services.AddControllers();
 
             // Register the Swagger generator, defining 1 or more Swagger documents
