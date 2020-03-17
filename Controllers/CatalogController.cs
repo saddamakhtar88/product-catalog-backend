@@ -48,10 +48,10 @@ namespace CatalogApi.Controllers
             return await _catalogService.UpdateCatalog(catalog);
         }
 
-        [HttpDelete]
-        public async Task<ActionResult<bool>> Delete(int catalogId)
+        [HttpDelete("{Id}")]
+        public async Task<ActionResult<bool>> Delete(int Id)
         {
-            return await _catalogService.DeleteCatalog(catalogId);
+            return await _catalogService.DeleteCatalog(Id);
         }
     }
 }
