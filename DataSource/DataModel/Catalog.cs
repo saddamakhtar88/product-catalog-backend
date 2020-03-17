@@ -11,7 +11,7 @@ namespace CatalogApi.DataSource.Model
 
         public string Description { get; set; }
 
-        // public CatalogImage Thumbnail { get; set; }
+        public string Thumbnail { get; set; }
 
         public List<CatalogImage> Images { get; set; }
 
@@ -22,6 +22,7 @@ namespace CatalogApi.DataSource.Model
                 Id = this.Id,
                 Title = this.Title,
                 Description = this.Description,
+                Thumbnail = this.Thumbnail,
                 Images = this.Images.Select(i => i.ToDomain()).ToList()
             };
         }
@@ -30,6 +31,7 @@ namespace CatalogApi.DataSource.Model
         {
             this.Title = domain.Title;
             this.Description = domain.Description;
+            this.Thumbnail = domain.Thumbnail;
 
             var updatedImages = new List<CatalogImage>();
 

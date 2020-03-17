@@ -9,7 +9,7 @@ namespace CatalogApi.Domain.Model
 
         public string Description { get; set; }
 
-        // public CatalogImage Thumbnail { get; set; }
+        public string Thumbnail { get; set; }
 
         public List<CatalogImage> Images { get; set; }
     }
