@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using CatalogApi.Services;
 using CatalogApi.DataSource;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace CatalogueApi
 {
@@ -72,6 +74,13 @@ namespace CatalogueApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Images")),
+                RequestPath = "/productcatalog/images"
             });
         }
     }
