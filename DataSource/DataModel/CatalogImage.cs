@@ -12,12 +12,14 @@ namespace CatalogApi.DataSource.Model
         {
             return new Domain.Model.CatalogImage
             {
+                Id = this.Id,
                 Path = this.Path
             };
         }
 
         public void SyncWithDomain(Domain.Model.CatalogImage domain)
         {
+            this.Id = domain.Id;
             this.Path = domain.Path;
         }
     }
