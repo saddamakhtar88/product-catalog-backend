@@ -11,6 +11,8 @@ namespace CatalogApi.DataSource
         public DbSet<Catalog> Catalogs { get; set; }
         public DbSet<CatalogImage> CatalogImages { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+            => options.UseSqlite("Data Source=catalog-sqlite.db");
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // modelBuilder.Entity<Catalog>()

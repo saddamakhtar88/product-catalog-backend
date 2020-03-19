@@ -32,11 +32,11 @@ namespace CatalogueApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<CatalogDbContext>(opt =>
-            opt.UseInMemoryDatabase("Catalog"));
+            opt.UseSqlite("Catalog"));
 
             services.AddScoped<ICatalogService, CatalogService>();
 
-            services.AddScoped<IImageUploadService, ImageUploadService>();           
+            services.AddScoped<IImageUploadService, ImageUploadService>();
 
             services.AddControllers();
 
