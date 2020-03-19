@@ -29,36 +29,32 @@ namespace CatalogApi.DataSource.Model
 
         public void SyncWithDomain(Domain.Model.Catalog domain)
         {
-            this.Title = domain.Title;
-            this.Description = domain.Description;
-            this.Thumbnail = domain.Thumbnail;
+            Title = domain.Title;
+            Description = domain.Description;
+            Thumbnail = domain.Thumbnail;
 
-            var updatedImages = new List<CatalogImage>();
-
-            int i = 0;
-
-            if (this.Images != null)
+            if (Images == null)
             {
-                for (; i < this.Images.Count; i++)
-                {
-                    if (i < domain.Images.Count)
-                    {
-                        Images[i].SyncWithDomain(domain.Images[i]);
-                        updatedImages.Add(Images[i]);
-                    }
-                }
-            }
-            if (i < domain.Images.Count)
-            {
-                for (; i < domain.Images.Count; i++)
-                {
-                    var catalogDataItem = new DataSource.Model.CatalogImage();
-                    catalogDataItem.SyncWithDomain(domain.Images[i]);
-                    updatedImages.Add(catalogDataItem);
-                }
+                Images = new List<CatalogImage>();
             }
 
-            this.Images = updatedImages;
+            var updatedImages = domain.Images.Select(domainImage =>
+            {
+                var filteredDataImage = Images.Where(dataImage => dataImage.Id == domainImage.Id).FirstOrDefault();
+                if (filteredDataImage != null)
+                {
+                    filteredDataImage.SyncWithDomain(domainImage);
+                    return filteredDataImage;
+                }
+                else
+                {
+                    var newDataImage = new DataSource.Model.CatalogImage();
+                    newDataImage.SyncWithDomain(domainImage);
+                    return newDataImage;
+                }
+            });
+
+            Images = updatedImages.ToList();
         }
     }
 }
