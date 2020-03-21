@@ -6,10 +6,15 @@ namespace CatalogApi.DataSource
     public class CatalogDbContext : DbContext
     {
         public CatalogDbContext(DbContextOptions<CatalogDbContext> options) : base(options)
-        { }
+        { 
+        }
 
         public DbSet<Catalog> Catalogs { get; set; }
         public DbSet<CatalogImage> CatalogImages { get; set; }
+
+        public DbSet<Contact> Contacts{get;set;}
+
+        public DbSet<Message> Messages{get;set;}
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options.UseSqlite("Data Source=catalog-sqlite.db");
@@ -21,6 +26,8 @@ namespace CatalogApi.DataSource
             modelBuilder.Entity<Catalog>()
                 .HasMany(b => b.Images)
                 .WithOne();
+
+            modelBuilder.Entity<Contact>().HasKey(a => a.Id);
         }
     }
 }

@@ -38,6 +38,9 @@ namespace CatalogueApi
 
             services.AddScoped<IImageUploadService, ImageUploadService>();
 
+            services.AddScoped<IContactService, ContactService>();
+            services.AddScoped<IMessageService, MessageService>();
+
             services.AddControllers();
 
             // Register the Swagger generator, defining 1 or more Swagger documents
@@ -48,9 +51,11 @@ namespace CatalogueApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, CatalogDbContext context)
         {
             app.UseSwagger();
+
+            context.Database.EnsureCreated();
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
             // specifying the Swagger JSON endpoint.
