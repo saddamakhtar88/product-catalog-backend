@@ -33,10 +33,10 @@ namespace CatalogueApi
         {
             services.AddDbContext<CatalogDbContext>(opt =>
             opt.UseSqlite("Catalog"));
-
-            services.AddScoped<ICatalogService, CatalogService>();
-
+            
             services.AddScoped<IImageUploadService, ImageUploadService>();
+            services.AddScoped<ICatalogService, CatalogService>();
+            
 
             services.AddScoped<IContactService, ContactService>();
             services.AddScoped<IMessageService, MessageService>();

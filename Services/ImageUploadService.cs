@@ -21,8 +21,8 @@ namespace CatalogApi.Services
         {
             var fileName = string.Concat("Image_", Guid.NewGuid(),Path.GetExtension(file.FileName));
 
-            var filePath = Path.Combine(folderPath, fileName);  
-            
+            var filePath = Path.Combine(folderPath, fileName); 
+
             using (var fileStream = new FileStream(filePath, FileMode.Create)) 
             {
                 await file.CopyToAsync(fileStream);
@@ -30,6 +30,20 @@ namespace CatalogApi.Services
 
             return fileName;
         }
-        
+
+        public bool DeleteImages(string[] imagePaths)
+        {
+            foreach(var catalogImage in imagePaths)
+            {
+                var filePath = Path.Combine(folderPath, catalogImage); 
+                if(File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+            }
+            
+            return true;
+        }
+
     }
 }

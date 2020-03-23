@@ -6,6 +6,7 @@ namespace CatalogApi.Services
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
     using System.Linq;
+    using System;
 
     public class MessageService : IMessageService
     {
@@ -21,7 +22,7 @@ namespace CatalogApi.Services
             var messagesList = await _dbContext.Messages.ToListAsync();
             if(messagesList != null)
             {
-                var listOfMessages = messagesList.Select(c => c.ToDomain(true)).ToList();
+                var listOfMessages = messagesList.Select(c => c.ToDomain()).ToList();
                 return listOfMessages.OrderByDescending(x=>x.PostedDate).ToList();
             }
             return null;    
@@ -31,9 +32,13 @@ namespace CatalogApi.Services
         {
              var messageDataItem = new DataSource.Model.Message();
             messageDataItem.SyncWithDomain(message);
+            
+            //Required while creating the Message
+            messageDataItem.PostedDate = DateTime.Now;
+
             var entry = _dbContext.Messages.Add(messageDataItem);
             await _dbContext.SaveChangesAsync();
-            return entry?.Entity?.ToDomain(false);
+            return entry?.Entity?.ToDomain();
         }
     }
 }

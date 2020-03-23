@@ -10,10 +10,12 @@ namespace CatalogApi.Services
     public class CatalogService : ICatalogService
     {
         private CatalogDbContext _dbContext { get; }
+        private readonly IImageUploadService _imageUploadService;
 
-        public CatalogService(CatalogDbContext dbContext)
+        public CatalogService(CatalogDbContext dbContext,IImageUploadService imageUploadService)
         {
             _dbContext = dbContext;
+            _imageUploadService = imageUploadService;
         }
 
         public async Task<Catalog> GetCatalogById(int id)
@@ -49,14 +51,34 @@ namespace CatalogApi.Services
         }
         public async Task<bool> DeleteCatalog(int catalogId)
         {
-            var entry = _dbContext.Catalogs.Find(catalogId);
+            var entry =  await _dbContext.Catalogs.Where(c => c.Id == catalogId).
+            Include(c => c.Images).FirstOrDefaultAsync();
             if (entry != null)
             {
                 _dbContext.Catalogs.Remove(entry);
                 await _dbContext.SaveChangesAsync();
+
+                 //Deleting images on delete of catalog
+                string[] imagePathArray = GetImagesPath(entry.Images);
+                if(imagePathArray != null && imagePathArray.Any())
+                {
+                    _imageUploadService.DeleteImages(imagePathArray);
+                }
+
                 return true;
             }
             return false;
+        }
+
+        private string[] GetImagesPath(List<DataSource.Model.CatalogImage> catalogImages)
+        {
+            List<string> strList = new List<string>();
+            foreach(var imageObj in catalogImages)
+            {
+                strList.Add(imageObj.Path);
+            }
+
+            return strList.ToArray();
         }
     }
 }

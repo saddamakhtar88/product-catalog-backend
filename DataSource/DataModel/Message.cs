@@ -11,7 +11,7 @@ namespace CatalogApi.DataSource.Model
         public string EmailID { get; set; }
         public string PhoneNumber {get;set;}
 
-        public Domain.Model.Message ToDomain(bool fromGet)
+        public Domain.Model.Message ToDomain()
         {
             return new Domain.Model.Message
             {
@@ -20,7 +20,7 @@ namespace CatalogApi.DataSource.Model
                 MessageText = this.MessageText,
                 PhoneNumber = this.PhoneNumber,
                 Name = this.Name,
-                PostedDate = fromGet? this.PostedDate: DateTime.Now
+                PostedDate = this.PostedDate
             };
         }
 
@@ -32,7 +32,7 @@ namespace CatalogApi.DataSource.Model
             this.MessageText = domain.MessageText;
             this.PhoneNumber = domain.PhoneNumber;
             this.Name = domain.Name;
-            this.PostedDate = DateTime.Now;
+            this.PostedDate = domain.PostedDate;
         }
     }
 }
