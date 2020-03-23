@@ -21,7 +21,7 @@ namespace CatalogApi.Services
             var messagesList = await _dbContext.Messages.ToListAsync();
             if(messagesList != null)
             {
-                var listOfMessages = messagesList.Select(c => c.ToDomain()).ToList();
+                var listOfMessages = messagesList.Select(c => c.ToDomain(true)).ToList();
                 return listOfMessages.OrderByDescending(x=>x.PostedDate).ToList();
             }
             return null;    
@@ -33,7 +33,7 @@ namespace CatalogApi.Services
             messageDataItem.SyncWithDomain(message);
             var entry = _dbContext.Messages.Add(messageDataItem);
             await _dbContext.SaveChangesAsync();
-            return entry?.Entity?.ToDomain();
+            return entry?.Entity?.ToDomain(false);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace CatalogApi.DataSource.Model
         public string EmailID { get; set; }
         public string PhoneNumber {get;set;}
 
-        public Domain.Model.Message ToDomain()
+        public Domain.Model.Message ToDomain(bool fromGet)
         {
             return new Domain.Model.Message
             {
@@ -20,9 +20,10 @@ namespace CatalogApi.DataSource.Model
                 MessageText = this.MessageText,
                 PhoneNumber = this.PhoneNumber,
                 Name = this.Name,
-                PostedDate = DateTime.Now
+                PostedDate = fromGet? this.PostedDate: DateTime.Now
             };
         }
+
 
         public void SyncWithDomain(Domain.Model.Message domain)
         {
