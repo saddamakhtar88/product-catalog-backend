@@ -41,7 +41,10 @@ namespace CatalogApi.Services
             var existingCatalogData = await _dbContext.Catalogs.Where(c => c.Id == catalog.Id).Include(c => c.Images).FirstOrDefaultAsync();
             if (existingCatalogData != null)
             {
+                UpdateAssociatedImages(existingCatalogData,catalog);
+
                 existingCatalogData.SyncWithDomain(catalog);
+                
                 var entry = _dbContext.Catalogs.Update(existingCatalogData);
                 await _dbContext.SaveChangesAsync();
                 return entry?.Entity?.ToDomain();
@@ -58,13 +61,9 @@ namespace CatalogApi.Services
                 _dbContext.Catalogs.Remove(entry);
                 await _dbContext.SaveChangesAsync();
 
-                 //Deleting images on delete of catalog
-                string[] imagePathArray = GetImagesPath(entry.Images);
-                if(imagePathArray != null && imagePathArray.Any())
-                {
-                    _imageUploadService.DeleteImages(imagePathArray);
-                }
-
+                //Deleting images on delete of catalog
+                DeleteImageOnUpdate(entry.Images);
+                 
                 return true;
             }
             return false;
@@ -79,6 +78,29 @@ namespace CatalogApi.Services
             }
 
             return strList.ToArray();
+        }
+
+        private void UpdateAssociatedImages(DataSource.Model.Catalog existingCatalogData, Catalog catalog)
+        {
+            // Map catalog image with datasource.model.catalogimage
+            var catalogImages  = catalog.Images.Select(a => new DataSource.Model.CatalogImage() 
+                                { Id  = a.Id, Path = a.Path }).ToList();
+            
+            //get the images which needs to be deleted
+            var deleted = existingCatalogData.Images.Where(c =>!catalogImages.Any(d => d.Path == c.Path)).ToList();
+
+            //delete images which removed from reference
+            DeleteImageOnUpdate(deleted);
+        }
+
+        private void DeleteImageOnUpdate(List<DataSource.Model.CatalogImage> imagesToBeDeleted)
+        {
+            //Deleting images on delete of catalog
+            string[] imagePathArray = GetImagesPath(imagesToBeDeleted);
+            if(imagePathArray != null && imagePathArray.Any())
+            {
+                _imageUploadService.DeleteImages(imagePathArray);
+            }
         }
     }
 }
