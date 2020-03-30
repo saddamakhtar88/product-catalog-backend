@@ -20,12 +20,12 @@ namespace CatalogApi.Services
 
         public async Task<Catalog> GetCatalogById(int id)
         {
-            var catalog = await _dbContext.Catalogs.Where(c => c.Id == id).Include(c => c.Images).FirstOrDefaultAsync();
+            var catalog = await _dbContext.Catalogs.Where(c => c.Id == id).Include(c => c.Images).OrderByDescending(x=> x.Id).FirstOrDefaultAsync();
             return catalog?.ToDomain();
         }
         public async Task<List<Catalog>> GetCatalogs()
         {
-            var catalogList = await _dbContext.Catalogs.Include(c => c.Images).ToListAsync();
+            var catalogList = await _dbContext.Catalogs.Include(c => c.Images).OrderByDescending(x=>x.Id).ToListAsync();
             return catalogList.Select(c => c.ToDomain()).ToList();
         }
         public async Task<Catalog> AddCatalog(Catalog catalog)
